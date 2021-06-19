@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Covid Information</title>
+      <script src="coviddata.json"></script>
+
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+      <!-- Internal CSS here, don't mind it. -->
+      <style>
+        body {
+          background-color: #00fffb;
+        }
+
+        p1 {
+          font-family: monospace;
+          font-weight: normal;
+          color: #3333ff;
+          font-size: 125%;
+        }
+
+        htitle {
+          font-size: 150%;
+          font-family: serif;
+          font-weight: bold;
+          color: #3333ff;
+        }
+
+        #trivialist {
+          font-family: monospace;
+          font-weight: normal;
+          color: #002aff;
+          font-size: 20;
+
+        }
+
+        h2 {
+          font-size: 75%;
+        }
+
+        H3 {
+          font-size: 75%
+        }
+      </style>
+  </head>
+
+
+  <body>
+    <nav>
+      <div class="nav-wrapper grey ">
+        <a href="home.html" class="brand-logo right" style="padding-right:10px">TheSoupMasta</a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li><a href="home.html">The Hub</a></li>
+          <li><a href="download.html">Download</a></li>
+          <li><a href="index.html">Random Facts Website</a></li>
+          <li><a href="calculator.html">Times Tables</a></li>
+          <li><a href="jsonapp.html">Covid Information</a></li>
+          <li><a href="about.html">About Me</a></li>
+        </ul>
+      </div>
+    </nav>
+    <htitle>Welcome to the COVID Updater.</htitle>
+    <div id="mylist">
+
+    </div>
+    <a class="waves-effect waves-light btn" href="home.html" size="200%">Back</a>
+  </body>
+
+  <script>
+    var divhandle = document.getElementById("mylist");
+    var myHTML = "<ul class='collection' style='color:#00fffb'>";
+    for (var i=0; i<coviddata.data.length; i++){
+      myHTML = myHTML + "<li class='collection-item'>" + coviddata.data[i].location + " (" + coviddata.data[i].confirmed + " )</li>"
+    }
+    divhandle.innerHTML = myHTML + "</ul>";
+  </script>
+</html>
