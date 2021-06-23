@@ -9,6 +9,10 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+    <!-- JS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
     <title>COVID Dashboard</title>
     <style>
       body {
@@ -26,6 +30,20 @@
         font-weight: normal;
         color: #002aff;
         font-size: 125%;
+      }
+
+      h2 {
+        font-family: monospace;
+        font-weight: normal;
+        color: #0000FF;
+        font-size: 75%;
+      }
+
+      h3 {
+        font-family: monospace;
+        font-weight: normal;
+        color: #0000FF;
+        font-size: 75%;
       }
 
       </style>
@@ -50,7 +68,7 @@
         <div class="card blue-grey darken-1">
           <div class="card-content blue-text">
             <span class="card-title">Covid Information</span>
-            <p>These are the top 10 countries currently in COVID-19 Cases.</p>
+            <p>These are the top 10 countries currently in COVID-19 cases.</p>
             <div id="list"></div>
           </div>
           <div class="card-action">
@@ -61,7 +79,23 @@
         </div>
       </div>
     </div>
-    <div style="margin:20px color:#002aff">
+    <div class="row">
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+          <div class="card-content blue-text">
+            <span class="card-title">Covid Information</span>
+            <p>These are the top 10 countries currently in COVID-19 deaths.</p>
+            <div id="list1"></div>
+          </div>
+          <div class="card-action">
+            <a href="https://www.cdc.gov/coronavirus/2019-nCoV/index.html">COVID-19 General Information</a>
+            <a href="https://www.trackcorona.live/api/countries">API Data</a>
+            <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic">Wikipedia Article</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin:20px">
       <br>
       <p1>The following excerpt is from Wikipedia, the free encyclopedia. Link is in button above.
       <br>
@@ -72,6 +106,23 @@
       Recommended preventive measures include social distancing, wearing face masks in public, ventilation and air-filtering, hand washing, covering one's mouth when sneezing or coughing, disinfecting surfaces, and monitoring and self-isolation for people exposed or symptomatic. Several vaccines have been developed and widely distributed in most developed countries since December 2020. Current treatments focus on addressing symptoms, but work is underway to develop medications that inhibit the virus. Authorities worldwide have responded by implementing travel restrictions, lockdowns and quarantines, workplace hazard controls, and business closures. Numerous jurisdictions have also worked to increase testing capacity and trace contacts of the infected.
       <br>
       The pandemic has resulted in significant global social and economic disruption, including the largest global recession since the Great Depression of the 1930s. It has led to widespread supply shortages exacerbated by panic buying, agricultural disruption, and food shortages. However, there have also been decreased emissions of pollutants and greenhouse gases. Numerous educational institutions and public areas have been partially or fully closed, and many events have been cancelled or postponed. Misinformation has circulated through social media and mass media, and political tensions have been exacerbated. The pandemic has raised issues of racial and geographic discrimination, health equity, and the balance between public health imperatives and individual rights."</p1>
+      <br>
+    </div>
+    <div class="row">
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+          <div class="card-content blue-text">
+            <span class="card-title">Covid Map</span>
+            <p>This is a map of the countries logging COVID cases.</p>
+            <div id="map" style="width:600px; height:400px;"></div>
+          </div>
+          <div class="card-action">
+            <a href="https://www.cdc.gov/coronavirus/2019-nCoV/index.html">COVID-19 General Information</a>
+            <a href="https://www.trackcorona.live/api/countries">API Data</a>
+            <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic">Wikipedia Article</a>
+          </div>
+        </div>
+      </div>
     </div>
     <div style="margin:15px;">
       <br>
@@ -106,5 +157,34 @@
         myHTML = myHTML + "</ul>";
         divHandle.innerHTML = myHTML;
       }
+
+      axios.get("https://www.trackcorona.live/api/countries").then(response1 => {
+        // console.log(response);
+        response1.data.data.sort(function(a, b) {
+          return b.dead - a.dead;
+        })
+        console.log(response1.data.data)
+        pushData1(response1);
+      })
+
+      function pushData1(response1) {
+        var divHandle1 = document.getElementById("list1");
+        var myHTML = "<ul class='collection'>";
+          for (var i = 0; i < 10; i++) {
+            myHTML = myHTML + "<a href="+"https://www.google.com/search?q="+response1.data.data[i].location+" class='collection-item'>" + response1.data.data[i].location + "    Confirmed: " + response1.data.data[i].confirmed + "    Deaths: " + response1.data.data[i].dead + "</a>";
+            }
+          myHTML = myHTML + "</ul>";
+          divHandle1.innerHTML = myHTML;
+        }
+
+    var map = L.map('map').setView([500.505, -67], 4);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([51.5, -0.09]).addTo(map)
+      .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+      .openPopup();
   </script>
 </html>
